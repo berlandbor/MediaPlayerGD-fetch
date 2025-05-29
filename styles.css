@@ -1,0 +1,187 @@
+body {
+  margin: 0;
+  background: #121212;
+  color: white;
+  font-family: sans-serif;
+}
+
+header {
+  padding: 20px;
+  text-align: center;
+  background: #181818;
+}
+
+h1 {
+  margin: 0 0 10px;
+}
+
+.playlist-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 10px;
+  padding: 10px;
+}
+
+.tile {
+  background: #2a2a2a;
+  padding: 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.tile:hover {
+  background: #3a3a3a;
+}
+
+.tile img {
+  width: 100%;
+  border-radius: 6px;
+}
+
+.tile-title {
+  margin-top: 8px;
+  font-size: 14px;
+  word-break: break-word;
+}
+
+.player-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  padding: 10px;
+}
+
+iframe {
+  width: 100%;
+  max-width: 960px;
+  height: 540px;
+  border: none;
+  border-radius: 10px;
+  background: black;
+}
+
+#clearDbBtn {
+  margin-left: 10px;
+  padding: 5px 12px;
+  font-size: 14px;
+  border: none;
+  border-radius: 6px;
+  background: #c62828;
+  color: white;
+  cursor: pointer;
+}
+
+#clearDbBtn:hover {
+  background: #b71c1c;
+}
+
+.tile-category {
+  font-size: 12px;
+  color: #bbb;
+  margin-top: 4px;
+}
+
+#categoryFilter {
+  margin-left: 10px;
+  padding: 5px 10px;
+  font-size: 14px;
+  border-radius: 6px;
+}
+
+.info-block {
+  text-align: center;
+  padding: 20px;
+  background: #1a1a1a;
+  border-bottom: 1px solid #333;
+}
+
+#mediaPoster {
+  max-width: 100px;
+  width: 25%;
+  border-radius: 10px;
+  margin: 10px auto;
+  display: block;
+}
+
+#mediaDescription {
+  margin-top: 10px;
+  font-size: 14px;
+  color: #ccc;
+}
+
+.share-link {
+  font-size: 12px;
+  color: #0f0;
+  margin-top: 5px;
+  word-break: break-word;
+}
+
+.status-bar {
+  background: #181818;
+  padding: 10px;
+  font-size: 14px;
+  color: #ccc;
+  text-align: center;
+  border-top: 1px solid #333;
+}
+
+#shareBtn {
+  margin-top: 10px;
+  padding: 6px 14px;
+  font-size: 14px;
+  border: none;
+  border-radius: 6px;
+  background: #1e88e5;
+  color: white;
+  cursor: pointer;
+}
+
+#aboutBtn {
+  margin-left: 10px;
+  padding: 5px 12px;
+  font-size: 14px;
+  border: none;
+  border-radius: 6px;
+  background: #007bff;
+  color: white;
+  cursor: pointer;
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  padding-top: 60px;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0,0,0,0.7);
+}
+
+.modal-content {
+  background-color: #222;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #444;
+  width: 90%;
+  max-width: 500px;
+  color: white;
+  border-radius: 8px;
+  text-align: left;
+}
+
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 26px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.close:hover {
+  color: #fff;
+}

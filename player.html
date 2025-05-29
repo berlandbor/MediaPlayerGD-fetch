@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🎬 MediaPlayer GD Berlandbor</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="info-block" id="infoBlock">
+    <h1>🎬 MediaPlayer GD Berlandbor</h1>
+    <h2 id="mediaTitle">🎬 Загрузка...</h2>
+    <p><strong>Категория:</strong> <span id="mediaCategory">–</span></p>
+    <img id="mediaPoster" alt="Постер" />
+    <p id="mediaDescription"></p>
+    <button id="shareBtn">🔗 Поделиться</button>
+    <div id="shareLink" class="share-link"></div>
+  </div>
+
+  <div class="player-container">
+    <iframe id="videoFrame" allowfullscreen></iframe>
+  </div>
+
+  <div class="status-bar">
+    <p>📡 Состояние сети: <span id="netStatus">проверка...</span></p>
+    <p>🔄 Пинг: <span id="pingResult">–</span> мс</p>
+    <canvas id="pingChart" width="300" height="40"></canvas>
+  </div>
+  
+  <div id="streamError" class="error-msg" style="display:none;">
+    ⚠️ Поток не загружается. Возможно, превышен лимит Google Drive или доступ ограничен.
+  </div>
+  
+
+  <script src="player.js"></script>
+</body>
+</html>

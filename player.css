@@ -1,0 +1,63 @@
+body {
+  margin: 0;
+  background: #121212;
+  color: white;
+  font-family: sans-serif;
+}
+
+header {
+  padding: 20px;
+  text-align: center;
+  background: #181818;
+}
+
+h1 {
+  margin: 0 0 10px;
+}
+
+.playlist-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 10px;
+  padding: 10px;
+}
+
+.tile {
+  background: #2a2a2a;
+  padding: 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.tile:hover {
+  background: #3a3a3a;
+}
+
+.tile img {
+  width: 100%;
+  border-radius: 6px;
+}
+
+.tile-title {
+  margin-top: 8px;
+  font-size: 14px;
+  word-break: break-word;
+}
+
+.player-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  padding: 10px;
+}
+
+iframe {
+  width: 100%;
+  max-width: 960px;
+  height: 540px;
+  border: none;
+  border-radius: 10px;
+  background: black;
+}

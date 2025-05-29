@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🎬 MediaPlayer GD Berlandbor (fetch)</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header>
+    <h1>🎬 MediaPlayer GD Berlandbor</h1>
+    <h2>⬇️Загрузите Плейлист в формате .json свой или от провайдера</h2>
+    <!--input type="file" id="playlistFile" accept=".json" /--><hr>
+    <button id="clearDbBtn">🗑 Очистить базу</button>
+    <select id="categoryFilter">
+      <option value="all">Все категории</option>
+    </select>
+    <button id="aboutBtn">ℹ️ О проекте</button>
+
+  </header>
+
+  <div class="playlist-grid" id="playlist"></div>
+
+  <div id="aboutModal" class="modal">
+    <div class="modal-content">
+      <span id="closeModal" class="close">&times;</span>
+      <h2>📺 MediaPlayer GD Berlandbor</h2>
+      <p>Этот проект позволяет загружать и управлять плейлистами видео, размещённых на Google Диске:</p>
+      <ul>
+        <li>🎞 Просмотр встраиваемых видео по ссылке</li>
+        <li>📂 Поддержка категорий</li>
+        <li>💾 Хранение данных в браузере</li>
+        <li>📡 Проверка подключения и пинг</li>
+        <li>🔗 Возможность поделиться ссылкой</li>
+        <li>О правилах создания плейлиста можно прочитать по ссылке ниже</li>
+      </ul>
+      <p>Автор: <strong>Berlandbor</strong></p>
+<p>
+  📫 <a href="https://t.me/Berlandbor" target="_blank">Telegram</a> <br>
+  💻 <a href="https://berlandbor.github.io/MediaPlayerGD/playlist-help.html" target="_blank">Правила создания плейлиста</a> <br>
+  🌐 <!--a href="https://yourwebsite.com" target="_blank">Мой сайт</a-->
+</p>
+<p>Версия: 1.0</p>
+
+      </p>
+    </div>
+  </div>
+  
+
+  <script src="script.js"></script>
+</body>
+</html>
