@@ -42,13 +42,18 @@ if (!fileId) {
     }
   }
 
-  // Кнопка "Поделиться"
-  const fullLink = `${location.origin}${location.pathname}?id=${fileId}`;
-  shareBtn.addEventListener("click", () => {
-    navigator.clipboard.writeText(fullLink).then(() => {
-      shareLink.textContent = `Ссылка скопирована: ${fullLink}`;
-    });
+  
+ // Кнопка "Поделиться"
+const fullLink = `${location.origin}${location.pathname}?id=${fileId}`;
+shareBtn.addEventListener("click", () => {
+  // Получаем название видео (если оно есть)
+  const title = mediaTitle.textContent || "Видео";
+  // Формируем текст для копирования
+  const shareText = `🎬 ${title}\n${fullLink}`;
+  navigator.clipboard.writeText(shareText).then(() => {
+    shareLink.textContent = `Скопировано: ${title}`;
   });
+});
 
   // Пинг до Google
   async function pingGoogle() {
