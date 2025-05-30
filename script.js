@@ -96,3 +96,25 @@ reloadPlaylistBtn.addEventListener("click", () => {
       playlistContainer.innerHTML = "<p>❌ Не удалось загрузить плейлист.</p>";
     });
 });
+
+// Получаем элементы
+const aboutBtn = document.getElementById("aboutBtn");
+const aboutModal = document.getElementById("aboutModal");
+const closeModal = document.getElementById("closeModal");
+
+// Открытие модального окна
+aboutBtn.addEventListener("click", () => {
+  aboutModal.style.display = "block";
+});
+
+// Закрытие по крестику
+closeModal.addEventListener("click", () => {
+  aboutModal.style.display = "none";
+});
+
+// Закрытие при клике вне модального окна
+window.addEventListener("click", (e) => {
+  if (e.target === aboutModal) {
+    aboutModal.style.display = "none";
+  }
+});
