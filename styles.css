@@ -185,3 +185,14 @@ iframe {
 .close:hover {
   color: #fff;
 }
+
+#back {
+  margin-left: 10px;
+  padding: 5px 12px;
+  font-size: 14px;
+  border: none;
+  border-radius: 6px;
+  background: #007bff;
+  color: white;
+  cursor: pointer;
+}
