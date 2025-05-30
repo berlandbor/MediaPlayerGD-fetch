@@ -80,3 +80,19 @@ function updateFilterOptions(items) {
     categoryFilter.appendChild(opt);
   });
 }
+
+const reloadPlaylistBtn = document.getElementById("reloadPlaylistBtn");
+reloadPlaylistBtn.addEventListener("click", () => {
+  fetch("PLGD-berlandbor-1.json")
+    .then(res => res.json())
+    .then(data => {
+      currentPlaylist = data;
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+      updateFilterOptions(data);
+      renderPlaylist(data);
+    })
+    .catch(err => {
+      console.error("Ошибка загрузки плейлиста:", err);
+      playlistContainer.innerHTML = "<p>❌ Не удалось загрузить плейлист.</p>";
+    });
+});
