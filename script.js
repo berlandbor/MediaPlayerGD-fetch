@@ -163,7 +163,7 @@ function openPlayerModal(title, url, poster) {
   }
   // Определяем тип (видео/аудио)
   let media;
-  if (url.match(/\.(mp3|ogg|wav|mp4)($|\?)/i)) {
+  if (url.match(/\.(mp3|ogg|wav|mp4|aacp)($|\?)/i)) {
     media = `<audio src="${url}" controls autoplay style="width:100%;max-width:520px;background:#000;" ${poster ? `poster="${poster}"` : ''}></audio>`;
   } else {
     // Для HLS (m3u8) вставьте свою поддержку HLS.js, если нужно!
