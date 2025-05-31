@@ -51,7 +51,7 @@ if (!fileId) {
   }
 
   
- // Кнопка "Поделиться"
+/* // Кнопка "Поделиться"
 const fullLink = `${location.origin}${location.pathname}?id=${fileId}`;
 shareBtn.addEventListener("click", () => {
   // Получаем название видео (если оно есть)
@@ -60,6 +60,21 @@ shareBtn.addEventListener("click", () => {
   const shareText = `🎬 Смотри от Berlandbor: ${title}\n${fullLink}`;
   navigator.clipboard.writeText(shareText).then(() => {
     shareLink.textContent = `Скопирована ссылка на: ${title}, теперь можно поделится!`;
+  });
+});*/
+
+shareBtn.addEventListener("click", () => {
+  const params = new URLSearchParams({
+    title: mediaTitle.textContent || "Видео",
+    id: fileId,
+    poster: posterUrl,
+    category: categoryValue,
+    description: descriptionValue
+  });
+  const fullLink = `${location.origin}${location.pathname}?${params.toString()}`;
+  const shareText = `🎬 Смотри от Berlandbor: ${mediaTitle.textContent}\n${fullLink}`;
+  navigator.clipboard.writeText(shareText).then(() => {
+    shareLink.textContent = `Скопирована ссылка на: ${mediaTitle.textContent}. - Теперь можно поделиться!`;
   });
 });
 
