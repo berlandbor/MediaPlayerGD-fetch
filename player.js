@@ -63,6 +63,8 @@ shareBtn.addEventListener("click", () => {
   });
 });*/
 
+const fullLink = `${location.origin}${location.pathname}?id=${fileId}`;
+
 shareBtn.addEventListener("click", () => {
   const params = new URLSearchParams({
     title: mediaTitle.textContent || "Видео",
