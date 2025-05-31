@@ -1,6 +1,14 @@
 const params = new URLSearchParams(window.location.search);
 const fileId = params.get("id");
 
+
+//const params = new URLSearchParams(location.search);
+const title = params.get("title");
+//const id = params.get("id");
+const poster = params.get("poster");
+const category = params.get("category");
+const description = params.get("description");
+
 const videoFrame = document.getElementById("videoFrame");
 const mediaTitle = document.getElementById("mediaTitle");
 const mediaCategory = document.getElementById("mediaCategory");
