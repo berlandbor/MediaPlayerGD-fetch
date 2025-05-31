@@ -154,6 +154,7 @@ function openPlayerModal(title, url, poster) {
     modal.innerHTML = `
       <div style="background:#222;padding:24px;border-radius:12px;max-width:90vw;max-height:90vh;">
         <div id="modalPlayerTitle" style="color:#fff;font-size:1.2em;margin-bottom:12px;"></div>
+        <div id="modalPlayerDiag" style="color:#eee;font-size:0.98em;margin-bottom:8px;"></div>
         <div id="modalPlayerContent"></div>
         <button id="closeStreamModal" style="display:block;margin:18px auto 0;">Закрыть</button>
       </div>
@@ -161,23 +162,85 @@ function openPlayerModal(title, url, poster) {
     document.body.appendChild(modal);
     document.getElementById('closeStreamModal').onclick = () => modal.style.display = 'none';
   }
+  document.getElementById('modalPlayerTitle').textContent = title;
+
+  // Диагностика
+  let diagDiv = document.getElementById('modalPlayerDiag');
+  const updateDiag = (txt) => diagDiv && (diagDiv.innerHTML = txt);
+
   // Определяем тип (видео/аудио)
   let media;
-  if (url.match(/\.(mp3|ogg|wav|aacp|)($|\?)/i)) {
-    media = `<audio src="${url}" controls autoplay style="width:100%;max-width:520px;background:#000;" ${poster ? `poster="${poster}"` : ''}></audio>`;
+  let isAudio = url.match(/\.(mp3|ogg|wav|aacp?)($|\?)/i);
+  if (isAudio) {
+    media = `<audio id="diagMedia" src="${url}" controls autoplay style="width:100%;max-width:520px;background:#000;" ${poster ? `poster="${poster}"` : ''}></audio>`;
   } else {
+    media = `<video id="diagMedia" src="${url}" controls autoplay style="width:100%;max-width:720px;" poster="${poster||''}"></video>`;
     if (url.endsWith('.m3u8')) {
-  media = `<video src="${url}" controls autoplay style="width:100%;max-width:720px;" poster="${poster||''}"></video>
-    <div style="color:#fff;font-size:0.95em;margin-top:8px;">
-      <b>Внимание:</b> Если поток не играет, попробуйте открыть в мобильном Chrome или Safari. Для полной поддержки .m3u8 используйте hls.js.
-    </div>`;
-
-  // обычные варианты
-}else {
-      media = `<video src="${url}" controls autoplay style="width:100%;max-width:720px;" poster="${poster||''}"></video>`;
+      media += `
+        <div style="color:#fff;font-size:0.95em;margin-top:8px;">
+          <b>Внимание:</b> Если поток не играет, попробуйте открыть в мобильном Chrome или Safari. Для полной поддержки .m3u8 используйте hls.js.
+        </div>
+      `;
     }
   }
-  document.getElementById('modalPlayerTitle').textContent = title;
   document.getElementById('modalPlayerContent').innerHTML = media;
   modal.style.display = 'flex';
+
+  // Диагностика
+  setTimeout(() => {
+    const player = document.getElementById('diagMedia');
+    if (!player) return;
+
+    let lastBuffered = 0;
+    let lastTime = 0;
+    let errorLog = [];
+
+    function diagUpdate() {
+      let status = '';
+      // Cтатус
+      if (player.readyState < 2) status += "⚪️ Ожидание данных<br>";
+      else if (player.paused) status += "⏸ Пауза<br>";
+      else if (player.ended) status += "🏁 Конец<br>";
+      else status += "🟢 Играет<br>";
+
+      // Буферизация
+      if (player.buffered.length) {
+        let bufEnd = player.buffered.end(player.buffered.length - 1);
+        let lag = (bufEnd - player.currentTime).toFixed(2);
+        status += `Буфер: ${lag} сек<br>`;
+      }
+
+      // Bitrate (приблизительно, если доступно)
+      if (player.webkitVideoDecodedByteCount || player.mozDecodedFrames) {
+        status += `Bitrate: экспериментально<br>`;
+      }
+
+      // Ошибки
+      if (errorLog.length) {
+        status += `<span style="color:#f77">Ошибки:<br>${errorLog.join('<br>')}</span>`;
+      }
+      updateDiag(status);
+    }
+
+    // События
+    player.addEventListener('playing', diagUpdate);
+    player.addEventListener('pause', diagUpdate);
+    player.addEventListener('waiting', () => { errorLog.push('Буферизация/задержка'); diagUpdate(); });
+    player.addEventListener('stalled', () => { errorLog.push('Поток застопорился (stalled)'); diagUpdate(); });
+    player.addEventListener('error', () => {
+      let err = player.error;
+      let errMsg = err ? `Код ошибки: ${err.code}` : "Неизвестная ошибка";
+      errorLog.push('Ошибка воспроизведения: ' + errMsg);
+      diagUpdate();
+    });
+    player.addEventListener('ended', diagUpdate);
+    player.addEventListener('timeupdate', diagUpdate);
+    player.addEventListener('progress', diagUpdate);
+
+    diagUpdate();
+
+    // Для живых стримов можно периодически опрашивать latency, если есть метка времени (расширенно)
+    // Здесь реализована базовая диагностика
+
+  }, 100);
 }
