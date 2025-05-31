@@ -166,10 +166,10 @@ function openPlayerModal(title, url, poster) {
   document.getElementById('modalPlayerTitle').textContent = title;
 
   // Определяем тип (видео/аудио)
-  let isAudio = url.match(/\.(mp3|ogg|wav|aacp?)($|\?)/i);
+  let isAudio = url.match(/\.(mp3|ogg|wav|aacp)($|\?)/i);
   let media;
   if (isAudio) {
-    media = `<audio id="diagMedia" src="${url}" controls autoplay style="width:100%;max-width:520px;background:#000;" ${poster ? `poster="${poster}"` : ''}></audio>`;
+    media = `<audio id="diagMedia" src="${url}" controls autoplay style="width:100%;max-width:520px;background:#000;"></audio>`;
   } else {
     media = `<video id="diagMedia" src="${url}" controls autoplay style="width:100%;max-width:720px;" poster="${poster||''}"></video>`;
     if (url.endsWith('.m3u8')) {
