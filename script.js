@@ -143,3 +143,46 @@ window.addEventListener("click", (e) => {
     aboutModal.style.display = "none";
   }
 });
+
+function openPlayerModal(title, url, poster) {
+  // Создаем/показываем модальное окно
+  let modal = document.getElementById('streamModal');
+  if (!modal) {
+    modal = document.createElement('div');
+    modal.id = 'streamModal';
+    modal.style = 'position:fixed;left:0;top:0;width:100vw;height:100vh;background:rgba(0,0,0,0.8);display:flex;align-items:center;justify-content:center;z-index:10000;';
+    modal.innerHTML = `
+      <div style="background:#222;padding:24px;border-radius:12px;max-width:90vw;max-height:90vh;">
+        <div id="modalPlayerTitle" style="color:#fff;font-size:1.2em;margin-bottom:12px;"></div>
+        <div id="modalPlayerContent"></div>
+        <button id="closeStreamModal" style="display:block;margin:18px auto 0;">Закрыть</button>
+      </div>
+    `;
+    document.body.appendChild(modal);
+    document.getElementById('closeStreamModal').onclick = () => modal.style.display = 'none';
+  }
+  // Определяем тип (видео/аудио)
+  let media;
+  if (url.match(/\.(mp3|ogg|wav|mp4)($|\?)/i)) {
+    media = `<audio src="${url}" controls autoplay style="width:100%;max-width:520px;background:#000;" ${poster ? `poster="${poster}"` : ''}></audio>`;
+  } else {
+    // Для HLS (m3u8) вставьте свою поддержку HLS.js, если нужно!
+    if (url.match(/\.m3u8($|\?)/i)) {
+      media = `<video id="modalVideo" controls autoplay style="width:100%;max-width:720px;" poster="${poster||''}"></video>
+      <script>
+        if (Hls.isSupported()) {
+          var hls = new Hls();
+          hls.loadSource('${url}');
+          hls.attachMedia(document.getElementById('modalVideo'));
+        } else {
+          document.getElementById('modalVideo').src = '${url}';
+        }
+      </script>`;
+    } else {
+      media = `<video src="${url}" controls autoplay style="width:100%;max-width:720px;" poster="${poster||''}"></video>`;
+    }
+  }
+  document.getElementById('modalPlayerTitle').textContent = title;
+  document.getElementById('modalPlayerContent').innerHTML = media;
+  modal.style.display = 'flex';
+}
