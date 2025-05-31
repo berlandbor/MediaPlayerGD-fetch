@@ -70,6 +70,31 @@ categoryFilter.addEventListener("change", () => {
   });
 }*/
 
+function renderPlaylist(items) {
+  playlistContainer.innerHTML = "";
+  items.forEach(item => {
+    const { title, id, poster, category, url } = item;
+    const imageSrc = poster || `https://drive.google.com/thumbnail?id=${id}`;
+
+    const tile = document.createElement("div");
+    tile.className = "tile";
+    tile.innerHTML = `
+      <img src="${imageSrc}" />
+      <div class="tile-title">${title}</div>
+      <div class="tile-category">📁 ${category || "Без категории"}</div>
+    `;
+
+    tile.addEventListener("click", () => {
+      if (url) {
+        openPlayerModal(title, url, poster); // Новая функция, см. ниже
+      } else {
+        window.open(`player.html?id=${id}`, "_blank");
+      }
+    });
+    playlistContainer.appendChild(tile);
+  });
+}
+
 function updateFilterOptions(items) {
   const categories = Array.from(new Set(items.map(i => i.category).filter(Boolean)));
   categoryFilter.innerHTML = `<option value="all">Все категории</option>`;
