@@ -165,7 +165,7 @@ function openPlayerModal(title, url, poster) {
   let media;
   if (url.match(/\.(mp3|ogg|wav|aacp|)($|\?)/i)) {
     media = `<audio src="${url}" controls autoplay style="width:100%;max-width:520px;background:#000;" ${poster ? `poster="${poster}"` : ''}></audio>`;
-  } /*else {
+  } else {
     if (url.endsWith('.m3u8')) {
   media = `<video src="${url}" controls autoplay style="width:100%;max-width:720px;" poster="${poster||''}"></video>
     <div style="color:#fff;font-size:0.95em;margin-top:8px;">
@@ -173,7 +173,7 @@ function openPlayerModal(title, url, poster) {
     </div>`;
 
   // обычные варианты
-}*/ else {
+}else {
       media = `<video src="${url}" controls autoplay style="width:100%;max-width:720px;" poster="${poster||''}"></video>`;
     }
   }
