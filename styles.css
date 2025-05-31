@@ -220,3 +220,13 @@ iframe {
     transform: scale(0.98);
 }
 
+.playlist-scroll {
+  max-height: 500px;        /* или любая нужная вам высота */
+  overflow-y: auto;         /* только вертикальная прокрутка */
+  padding-right: 8px;       /* чтобы не обрезался скроллбар */
+  background: #fafafa;      /* или ваш цвет */
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+}
+
+
