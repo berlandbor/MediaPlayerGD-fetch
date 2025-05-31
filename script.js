@@ -163,22 +163,17 @@ function openPlayerModal(title, url, poster) {
   }
   // Определяем тип (видео/аудио)
   let media;
-  if (url.match(/\.(mp3|ogg|wav|mp4|aacp|m3u8)($|\?)/i)) {
+  if (url.match(/\.(mp3|ogg|wav|mp4|aacp|)($|\?)/i)) {
     media = `<audio src="${url}" controls autoplay style="width:100%;max-width:520px;background:#000;" ${poster ? `poster="${poster}"` : ''}></audio>`;
   } else {
-    // Для HLS (m3u8) вставьте свою поддержку HLS.js, если нужно!
-    if (url.match(/\.m3u8($|\?)/i)) {
-      media = `<video id="modalVideo" controls autoplay style="width:100%;max-width:720px;" poster="${poster||''}"></video>
-      <!--script>
-        if (Hls.isSupported()) {
-          var hls = new Hls();
-          hls.loadSource('${url}');
-          hls.attachMedia(document.getElementById('modalVideo'));
-        } else {
-          document.getElementById('modalVideo').src = '${url}';
-        }
-      </script-->`;
-    } else {
+    if (url.endsWith('.m3u8')) {
+  media = `<video src="${url}" controls autoplay style="width:100%;max-width:720px;" poster="${poster||''}"></video>
+    <div style="color:#fff;font-size:0.95em;margin-top:8px;">
+      <b>Внимание:</b> Если поток не играет, попробуйте открыть в мобильном Chrome или Safari. Для полной поддержки .m3u8 используйте hls.js.
+    </div>`;
+
+  // обычные варианты
+} else {
       media = `<video src="${url}" controls autoplay style="width:100%;max-width:720px;" poster="${poster||''}"></video>`;
     }
   }
