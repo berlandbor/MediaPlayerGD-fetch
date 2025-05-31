@@ -69,9 +69,9 @@ shareBtn.addEventListener("click", () => {
   const params = new URLSearchParams({
     title: mediaTitle.textContent || "Видео",
     id: fileId,
-    poster: posterUrl,
-    category: categoryValue,
-    description: descriptionValue
+    poster: mediaPoster.src || "",
+    category: mediaCategory.textContent || "",
+    description: mediaDescription.textContent || ""
   });
   const fullLink = `${location.origin}${location.pathname}?${params.toString()}`;
   const shareText = `🎬 Смотри от Berlandbor: ${mediaTitle.textContent}\n${fullLink}`;
