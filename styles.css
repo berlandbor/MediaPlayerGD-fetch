@@ -328,7 +328,7 @@ iframe {
 }
 
 
-/*#streamModal {
+#streamModal {
   position: fixed;
   left: 0; top: 0;
   width: 100vw; height: 100vh;
@@ -338,11 +338,11 @@ iframe {
   justify-content: center;
   z-index: 10000;
   box-sizing: border-box;
-}*/
+}
 
-/*#streamModal > div {
+#streamModal > div {
   background: #222;
-  padding: 24px;
+  padding: 12px;
   border-radius: 12px;
   max-width: 90vw;
   max-height: 90vh;
@@ -350,7 +350,7 @@ iframe {
   display: flex;
   flex-direction: column;
   align-items: center;
-}*/
+}
 
 #modalPlayerContent video
 /*#modalPlayerContent audio */{
@@ -374,4 +374,22 @@ iframe {
  /* #modalPlayerContent audio*/ {
     max-height: 50vh;
   }
+}
+
+#modalPlayerContent {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+#modalPlayerContent audio {
+  width: 100%;
+  max-width: 520px;
+  min-width: 220px;
+  box-sizing: border-box;
+  margin: 0 auto;
+  display: block;
+  /* Не задавайте max-height для audio! */
 }
