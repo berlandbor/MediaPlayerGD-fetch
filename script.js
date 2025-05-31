@@ -163,13 +163,13 @@ function openPlayerModal(title, url, poster) {
   }
   // Определяем тип (видео/аудио)
   let media;
-  if (url.match(/\.(mp3|ogg|wav|mp4|aacp)($|\?)/i)) {
+  if (url.match(/\.(mp3|ogg|wav|mp4|aacp|m3u8)($|\?)/i)) {
     media = `<audio src="${url}" controls autoplay style="width:100%;max-width:520px;background:#000;" ${poster ? `poster="${poster}"` : ''}></audio>`;
   } else {
     // Для HLS (m3u8) вставьте свою поддержку HLS.js, если нужно!
     if (url.match(/\.m3u8($|\?)/i)) {
       media = `<video id="modalVideo" controls autoplay style="width:100%;max-width:720px;" poster="${poster||''}"></video>
-      <script>
+      <!--script>
         if (Hls.isSupported()) {
           var hls = new Hls();
           hls.loadSource('${url}');
@@ -177,7 +177,7 @@ function openPlayerModal(title, url, poster) {
         } else {
           document.getElementById('modalVideo').src = '${url}';
         }
-      </script>`;
+      </script-->`;
     } else {
       media = `<video src="${url}" controls autoplay style="width:100%;max-width:720px;" poster="${poster||''}"></video>`;
     }
