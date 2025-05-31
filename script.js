@@ -50,7 +50,7 @@ categoryFilter.addEventListener("change", () => {
   }
 });
 
-function renderPlaylist(items) {
+/*function renderPlaylist(items) {
   playlistContainer.innerHTML = "";
   items.forEach(item => {
     const { title, id, poster, category } = item;
@@ -68,7 +68,7 @@ function renderPlaylist(items) {
     });
     playlistContainer.appendChild(tile);
   });
-}
+}*/
 
 function updateFilterOptions(items) {
   const categories = Array.from(new Set(items.map(i => i.category).filter(Boolean)));
