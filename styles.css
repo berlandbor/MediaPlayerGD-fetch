@@ -220,19 +220,3 @@ iframe {
     transform: scale(0.98);
 }
 
-.playlist-wrapper {
-  max-height: 500px;     /* Высота области прокрутки, можно изменить под ваш дизайн */
-  overflow-y: auto;      /* Вертикальная прокрутка */
-  border: 1px solid #ddd;/* Для визуального отделения, опционально */
-  border-radius: 8px;    /* Красивые скругления */
-  background: #fafafa;   /* Фон, опционально */
-  padding: 6px;
-  margin-bottom: 24px;   /* Отступ снизу, если нужно */
-}
-
-/* При необходимости можно ограничить ширину */
-#playlist {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
