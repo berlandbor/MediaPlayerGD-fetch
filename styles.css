@@ -237,3 +237,93 @@ iframe {
   /* НЕ задавайте здесь высоту и overflow! */
 }
 
+/* Контейнер для кнопок управления плейлистом */
+.playlist-panel {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7em;
+  align-items: center;
+  justify-content: center;
+  margin: 1em 0;
+}
+
+/* Общие стили для кнопок управления */
+#clearDbBtn,
+#reloadPlaylistBtn,
+#aboutBtn {
+  background: #2d2d2d;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 0.6em 1.1em;
+  font-size: 1.15rem;
+  min-width: 44px;
+  min-height: 44px;
+  cursor: pointer;
+  margin: 0.1em;
+  transition: background 0.2s, transform 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#clearDbBtn:active,
+#reloadPlaylistBtn:active,
+#aboutBtn:active,
+#clearDbBtn:focus,
+#reloadPlaylistBtn:focus,
+#aboutBtn:focus {
+  background: #444;
+  transform: scale(0.97);
+  outline: none;
+}
+
+/* Селектор категории тоже делаем адаптивным */
+#categoryFilter {
+  border-radius: 8px;
+  padding: 0.5em 1em;
+  font-size: 1.1rem;
+  margin: 0.1em;
+  min-height: 44px;
+  background: #222;
+  color: #fff;
+  border: 1px solid #444;
+}
+
+@media (max-width: 600px) {
+  .playlist-panel {
+    gap: 0.4em;
+    flex-direction: column;
+    align-items: stretch;
+  }
+  #clearDbBtn,
+  #reloadPlaylistBtn,
+  #aboutBtn {
+    font-size: 1rem;
+    padding: 0.8em 0.9em;
+    min-width: 38px;
+    min-height: 38px;
+  }
+  #categoryFilter {
+    font-size: 1rem;
+    min-height: 38px;
+    padding: 0.5em 0.7em;
+  }
+}
+
+@media (max-width: 400px) {
+  #clearDbBtn,
+  #reloadPlaylistBtn,
+  #aboutBtn {
+    font-size: 0.92rem;
+    padding: 0.5em 0.7em;
+    min-width: 34px;
+    min-height: 34px;
+  }
+  #categoryFilter {
+    font-size: 0.92rem;
+    min-height: 34px;
+    padding: 0.4em 0.5em;
+  }
+}
+
