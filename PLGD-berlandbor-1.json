@@ -40,7 +40,13 @@
     "poster": "https://upload.wikimedia.org/wikipedia/ru/8/85/Terminator2poster.jpg",
     "category": "Боевик. Фантастика",
     "description": "Американский научно-фантастический боевик 1991 года, пятый полнометражный фильм, снятый Джеймсом Кэмероном, который написал сценарий в соавторстве с Уильямом Вишером. "
-  }
+  },
+{
+  "title": "Радио Record Techno",
+  "url": "https://radiorecord.hostingradio.ru/techno96.aacp",
+  "poster": "https://example.com/poster.jpg",
+  "category": "Радио"
+}
 
 
 ]
