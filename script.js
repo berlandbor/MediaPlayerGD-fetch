@@ -153,10 +153,11 @@ function openPlayerModal(title, url, poster) {
     modal.style = 'position:fixed;left:0;top:0;width:100vw;height:100vh;background:rgba(0,0,0,0.8);display:flex;align-items:center;justify-content:center;z-index:10000;';
     modal.innerHTML = `
       <div style="background:#222;padding:24px;border-radius:12px;max-width:90vw;max-height:90vh;">
+        <button id="closeStreamModal" style="display:block;margin:18px auto 0;">❎</button>
         <div id="modalPlayerTitle" style="color:#fff;font-size:1.2em;margin-bottom:12px;"></div>
         <div id="modalPlayerDiag" style="color:#eee;font-size:0.98em;margin-bottom:8px;"></div>
         <div id="modalPlayerContent"></div>
-        <button id="closeStreamModal" style="display:block;margin:18px auto 0;">Закрыть</button>
+        
       </div>
     `;
     document.body.appendChild(modal);
