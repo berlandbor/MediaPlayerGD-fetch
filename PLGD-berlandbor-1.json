@@ -13,20 +13,6 @@
     "category": "Комедия",
     "description": "советская эксцентрическая комедия, снятая в 1968 году режиссёром Леонидом Гайдаем."
   },
- {
-    "title": "Х/Ф: Терминатор",
-    "id": "10vABnlskCVQSx-Opq0b9LQdVWk0nkzn8",
-    "poster": "https://upload.wikimedia.org/wikipedia/ru/c/ca/Terminator_poster.jpg",
-    "category": "Боевик. Фантастика",
-    "description": "американский научно-фантастический боевик 1984 года, второй полнометражный фильм режиссёра Джеймса Кэмерона."
-  },
-{
-    "title": "Х/Ф: Наша Раша. С 8 Марта.",
-    "id": "1-1Bsf6Ll1EbSspd5dqYWNQyyat__oUsa",
-    "poster": "https://www.film.ru/sites/default/files/styles/thumb_260x400/public/movies/posters/50996759-5284481.jpg",
-    "category": "Комедия",
-    "description": "Премьера: 7 марта 2025 года на телеканале ТНТ и в онлайн-кинотеатре «Кинопоиск». Жанр: Комедия, мюзикл. Режиссёр: Саша Абдуллаев. Продолжительность: 1 час 26 минут. Возрастное ограничение: 18+"
-  },
 {
     "title": "Х/Ф: Дева Мария - Мать Иисуса Христа",
     "id": "1187kkrv8f9WWWP_U4WFAB3HjF5qcgFCd",
@@ -35,11 +21,33 @@
     "description": "«Мария» — эпический библейский фильм 2024 года, снятый режиссёром Диджеем Карузо по сценарию Тимоти Майкла Хейса."
   },
 {
+    "title": "Х/Ф: Наша Раша. С 8 Марта.",
+    "id": "1-1Bsf6Ll1EbSspd5dqYWNQyyat__oUsa",
+    "poster": "https://www.film.ru/sites/default/files/styles/thumb_260x400/public/movies/posters/50996759-5284481.jpg",
+    "category": "Комедия",
+    "description": "Премьера: 7 марта 2025 года на телеканале ТНТ и в онлайн-кинотеатре «Кинопоиск». Жанр: Комедия, мюзикл. Режиссёр: Саша Абдуллаев. Продолжительность: 1 час 26 минут. Возрастное ограничение: 18+"
+  },
+ {
+    "title": "Х/Ф: Терминатор",
+    "id": "10vABnlskCVQSx-Opq0b9LQdVWk0nkzn8",
+    "poster": "https://upload.wikimedia.org/wikipedia/ru/c/ca/Terminator_poster.jpg",
+    "category": "Боевик. Фантастика",
+    "description": "американский научно-фантастический боевик 1984 года, второй полнометражный фильм режиссёра Джеймса Кэмерона."
+  },
+
+{
     "title": "Х/Ф: Термина́тор 2: Су́дный день",
     "id": "1-AqKEsxFr_xzKxG7S9uD0o3mD9DnuFFm",
     "poster": "https://upload.wikimedia.org/wikipedia/ru/8/85/Terminator2poster.jpg",
     "category": "Боевик. Фантастика",
     "description": "Американский научно-фантастический боевик 1991 года, пятый полнометражный фильм, снятый Джеймсом Кэмероном, который написал сценарий в соавторстве с Уильямом Вишером. "
+  },
+{
+    "title": "Х/Ф: Термина́тор 3: Восстание Машин",
+    "id": "11dTfkOiMjUOvh9kDpVJwomicX-hiJJ7w",
+    "poster": "https://upload.wikimedia.org/wikipedia/ru/7/73/Terminator_3_Rise_of_the_Machines.jpg",
+    "category": "Боевик. Фантастика",
+    "description": "американский научно-фантастический боевик режиссёра Джонатана Мостоу, вышедший в прокат в 2003 году. В главных ролях — Арнольд Шварценеггер, Ник Стал, Клэр Дэйнс и Кристанна Локен. Является прямым продолжением фильма 1991 года «Терминатор 2: Судный день» "
   },
 {
   "title": "Радио Record Techno",
