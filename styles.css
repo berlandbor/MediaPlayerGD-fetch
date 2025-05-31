@@ -220,31 +220,19 @@ iframe {
     transform: scale(0.98);
 }
 
-.playlist-scroll {
-  max-height: 500px;         /* или любая высота под ваш дизайн */
-  overflow-y: auto;
-  padding-right: 8px;        /* чтобы не обрезался скроллбар */
-  margin-bottom: 24px;
-  background: #fafafa;
-  border-radius: 8px;
-  border: 1px solid #e0e0e0;
+.playlist-wrapper {
+  max-height: 500px;     /* Высота области прокрутки, можно изменить под ваш дизайн */
+  overflow-y: auto;      /* Вертикальная прокрутка */
+  border: 1px solid #ddd;/* Для визуального отделения, опционально */
+  border-radius: 8px;    /* Красивые скругления */
+  background: #fafafa;   /* Фон, опционально */
+  padding: 6px;
+  margin-bottom: 24px;   /* Отступ снизу, если нужно */
 }
 
-.playlist-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* ширина плитки */
-  gap: 16px;
-  padding: 12px 8px;
-}
-
-/* Пример для плитки (tile), если нужно */
-.tile {
-  background: #fff;
-  border-radius: 8px;
-  padding: 10px;
-  box-shadow: 0 1px 6px rgba(0,0,0,0.06);
-  transition: box-shadow 0.2s;
-}
-.tile:hover {
-  box-shadow: 0 4px 18px rgba(0,0,0,0.12);
+/* При необходимости можно ограничить ширину */
+#playlist {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
