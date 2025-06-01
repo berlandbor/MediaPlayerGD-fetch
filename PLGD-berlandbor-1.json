@@ -68,7 +68,17 @@
   "poster": "https://i.imgur.com/4fhBbam.png",
   "category": "ТВ Стрим. Это дополнение.",
   "country": "UN"
-}
+},
+
+{
+    "title": "VK Видео: Пример",
+    "vk_oid": "-176294899",
+    "vk_id": "456248594",
+    "vk_hash": "e6eee4b60b892e8f",
+    "poster": "https://vk.com/images/video_placeholder.png",
+    "category": "VK",
+    "description": "Пример видео с VK по oid/id/hash"
+  }
 
 
 ]
