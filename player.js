@@ -24,7 +24,7 @@ const ctx = pingChart.getContext("2d");
 
 let pingHistory = [];
 
-/*if (!fileId) {
+if (!fileId) {
   document.body.innerHTML = "<p>❌ Ошибка: медиа не выбрано</p>";
 } else {
   const url = `https://drive.google.com/file/d/${fileId}/preview`;
@@ -48,9 +48,9 @@ let pingHistory = [];
     } catch (e) {
       console.warn("Ошибка чтения localStorage:", e);
     }
-  }*/
+  }
 
-function getQueryParam(name) {
+/*function getQueryParam(name) {
   const url = new URL(window.location.href);
   return url.searchParams.get(name);
 }
@@ -122,7 +122,7 @@ else if (fileId) {
   }
 } else {
   document.body.innerHTML = "<p>❌ Ошибка: медиа не выбрано</p>";
-}
+}*/
 
   
 /* // Кнопка "Поделиться"
