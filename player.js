@@ -155,30 +155,39 @@ const fullLink = `${location.origin}${location.pathname}?id=${fileId}`;
 });*/
 
 shareBtn.onclick = function() {
-  // Собираем данные
-  const url = window.location.href;
-  const title = mediaTitle.textContent || '';
-  const desc = mediaDescription.textContent || '';
-  const cat = mediaCategory.textContent || '';
-  const poster = mediaPoster.src || '';
-  // Формируем текст для расшаривания
+  // Собираем параметры для ссылки
+  const params = new URLSearchParams({
+    title: mediaTitle.textContent || "Видео",
+    id: fileId,
+    poster: mediaPoster.src || "",
+    category: mediaCategory.textContent || "",
+    description: mediaDescription.textContent || ""
+  });
+  const fullLink = `${location.origin}${location.pathname}?${params.toString()}`;
+
+  // Формируем подробный текст для шаринга
   let text = '';
+  const title = mediaTitle.textContent || '';
+  const cat = mediaCategory.textContent || '';
+  const desc = mediaDescription.textContent || '';
+  const poster = mediaPoster.src || '';
+
   if (title) text += `🎬 ${title}\n`;
   if (cat) text += `Категория: ${cat}\n`;
   if (desc) text += `${desc}\n`;
   if (poster) text += `Постер: ${poster}\n`;
-  text += `❗СМОТРЕТЬ от Berlandbor ▶️: ${url}`;
+  text += `❗СМОТРЕТЬ от Berlandbor ▶️: ${fullLink}`;
 
-  // Пробуем Web Share API (для смартфонов)
+  // Web Share API для смартфонов
   if (navigator.share) {
     navigator.share({
       title: title,
       text: text,
-      url: url
+      url: fullLink
     }).catch(() => {});
   } else { // Для десктопа — копируем в буфер обмена
     navigator.clipboard.writeText(text).then(() => {
-      alert('Ссылка и данные скопированы! Можно вставить в мессенджер.');
+      alert('Ссылка и все данные скопированы! Можно вставить в мессенджер.');
     });
   }
 };
