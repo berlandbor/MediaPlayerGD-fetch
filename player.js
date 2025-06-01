@@ -167,7 +167,7 @@ shareBtn.onclick = function() {
   if (cat) text += `Категория: ${cat}\n`;
   if (desc) text += `${desc}\n`;
   if (poster) text += `Постер: ${poster}\n`;
-  text += `Смотреть: ${url}`;
+  text += `❗СМОТРЕТЬ от Berlandbor ▶️: ${url}`;
 
   // Пробуем Web Share API (для смартфонов)
   if (navigator.share) {
