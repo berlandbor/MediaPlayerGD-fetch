@@ -139,7 +139,7 @@ shareBtn.addEventListener("click", () => {
 
 const fullLink = `${location.origin}${location.pathname}?id=${fileId}`;
 
-shareBtn.addEventListener("click", () => {
+/*shareBtn.addEventListener("click", () => {
   const params = new URLSearchParams({
     title: mediaTitle.textContent || "Видео",
     id: fileId,
@@ -149,6 +149,23 @@ shareBtn.addEventListener("click", () => {
   });
   const fullLink = `${location.origin}${location.pathname}?${params.toString()}`;
   const shareText = `🎬 Смотри от Berlandbor: ${mediaTitle.textContent}\n${fullLink}`;
+  navigator.clipboard.writeText(shareText).then(() => {
+    shareLink.textContent = `Скопирована ссылка на: ${mediaTitle.textContent}. - Теперь можно поделиться!`;
+  });
+});*/
+
+shareBtn.addEventListener("click", () => {
+  const params = new URLSearchParams({
+    title: mediaTitle.textContent || "Видео",
+    id: fileId,
+    poster: mediaPoster.src || "",
+    category: mediaCategory.textContent || "",
+    description: mediaDescription.textContent || ""
+  });
+  const fullLink = `${location.origin}${location.pathname}?${params.toString()}`;
+  // Добавляем постер в текст
+  const posterLine = mediaPoster.src ? `Постер: ${mediaPoster.src}\n` : '';
+  const shareText = `🎬 Смотри от Berlandbor: ${mediaTitle.textContent}\n${fullLink}\n${posterLine}`;
   navigator.clipboard.writeText(shareText).then(() => {
     shareLink.textContent = `Скопирована ссылка на: ${mediaTitle.textContent}. - Теперь можно поделиться!`;
   });
