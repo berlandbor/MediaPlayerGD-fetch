@@ -163,8 +163,10 @@ shareBtn.addEventListener("click", () => {
     description: mediaDescription.textContent || ""
   });
   const fullLink = `${location.origin}${location.pathname}?${params.toString()}`;
+
   // Добавляем постер в текст
   const posterLine = mediaPoster.src ? `Постер: ${mediaPoster.src}\n` : '';
+
   const shareText = `🎬 Смотри от Berlandbor: ${mediaTitle.textContent}\n${fullLink}\n${posterLine}`;
   navigator.clipboard.writeText(shareText).then(() => {
     shareLink.textContent = `Скопирована ссылка на: ${mediaTitle.textContent}. - Теперь можно поделиться!`;
