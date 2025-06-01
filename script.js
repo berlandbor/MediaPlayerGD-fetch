@@ -161,7 +161,15 @@ function openPlayerModal(title, url, poster) {
       </div>
     `;
     document.body.appendChild(modal);
-    document.getElementById('closeStreamModal').onclick = () => modal.style.display = 'none';
+    document.getElementById('closeStreamModal').onclick = () => {
+  const player = document.getElementById('diagMedia');
+  if (player) {
+    player.pause();
+    player.src = "";
+    player.load();
+  }
+  modal.style.display = 'none';
+}
   }
   document.getElementById('modalPlayerTitle').textContent = title;
 
