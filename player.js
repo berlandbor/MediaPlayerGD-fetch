@@ -139,7 +139,7 @@ shareBtn.addEventListener("click", () => {
 
 const fullLink = `${location.origin}${location.pathname}?id=${fileId}`;
 
-/*shareBtn.addEventListener("click", () => {
+shareBtn.addEventListener("click", () => {
   const params = new URLSearchParams({
     title: mediaTitle.textContent || "Видео",
     id: fileId,
@@ -152,45 +152,9 @@ const fullLink = `${location.origin}${location.pathname}?id=${fileId}`;
   navigator.clipboard.writeText(shareText).then(() => {
     shareLink.textContent = `Скопирована ссылка на: ${mediaTitle.textContent}. - Теперь можно поделиться!`;
   });
-});*/
+});
 
-shareBtn.onclick = function() {
-  // Собираем параметры для ссылки
-  const params = new URLSearchParams({
-    title: mediaTitle.textContent || "Видео",
-    id: fileId,
-    poster: mediaPoster.src || "",
-    category: mediaCategory.textContent || "",
-    description: mediaDescription.textContent || ""
-  });
-  const fullLink = `${location.origin}${location.pathname}?${params.toString()}`;
 
-  // Формируем подробный текст для шаринга
-  let text = '';
-  const title = mediaTitle.textContent || '';
-  const cat = mediaCategory.textContent || '';
-  const desc = mediaDescription.textContent || '';
-  const poster = mediaPoster.src || '';
-
-  if (title) text += `🎬 ${title}\n`;
-  if (cat) text += `Категория: ${cat}\n`;
-  if (desc) text += `${desc}\n`;
-  if (poster) text += `Постер: ${poster}\n`;
-  text += `❗СМОТРЕТЬ от Berlandbor ▶️: ${fullLink}`;
-
-  // Web Share API для смартфонов
-  if (navigator.share) {
-    navigator.share({
-      title: title,
-      text: text,
-      url: fullLink
-    }).catch(() => {});
-  } else { // Для десктопа — копируем в буфер обмена
-    navigator.clipboard.writeText(text).then(() => {
-      alert('Ссылка и все данные скопированы! Можно вставить в мессенджер.');
-    });
-  }
-};
 
   // Пинг до Google
   async function pingGoogle() {
