@@ -86,11 +86,15 @@ function renderPlaylist(items) {
 
     tile.addEventListener("click", () => {
       if (url) {
-        openPlayerModal(title, url, poster); // Новая функция, см. ниже
-      } else {
+        openPlayerModal(title, url, poster);
+      } else if (item.vk_oid && item.vk_id && item.vk_hash) {
+        const vkParams = `vk_oid=${encodeURIComponent(item.vk_oid)}&vk_id=${encodeURIComponent(item.vk_id)}&vk_hash=${encodeURIComponent(item.vk_hash)}`;
+        window.open(`player.html?${vkParams}`, "_blank");
+      } else if (id) {
         window.open(`player.html?id=${id}`, "_blank");
       }
     });
+
     playlistContainer.appendChild(tile);
   });
 }
