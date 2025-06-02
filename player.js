@@ -154,13 +154,13 @@ const fullLink = `${location.origin}${location.pathname}?id=${fileId}`;
   });
 });*/
 
-/*shareBtn.addEventListener("click", () => {
+shareBtn.addEventListener("click", () => {
   const params = new URLSearchParams({
     title: mediaTitle.textContent || "Видео",
     id: fileId,
     poster: mediaPoster.src || "",
     category: mediaCategory.textContent || "",
-    description: mediaDescription.textContent || ""
+    description: /*mediaDescription.textContent ||*/ "😀"
   });
   const fullLink = `${location.origin}${location.pathname}?${params.toString()}`;
 
@@ -171,9 +171,9 @@ const fullLink = `${location.origin}${location.pathname}?id=${fileId}`;
   navigator.clipboard.writeText(shareText).then(() => {
     shareLink.textContent = `Скопирована ссылка на: ${mediaTitle.textContent}. - Теперь можно поделиться!`;
   });
-});*/
+});
 
-shareBtn.onclick = function() {
+/*shareBtn.onclick = function() {
   // Формируем только нужные параметры в ссылке
   const params = new URLSearchParams({
     title: mediaTitle.textContent || "Видео",
@@ -207,7 +207,7 @@ shareBtn.onclick = function() {
       alert('Ссылка и данные скопированы! Можно вставить в мессенджер.');
     });
   }
-};
+};*/
 
 
 
