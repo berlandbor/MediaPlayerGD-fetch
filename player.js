@@ -9,7 +9,7 @@ const categoryFromUrl = params.get("category");
 const descriptionFromUrl = params.get("description");
 
 const videoFrame = document.getElementById("videoFrame");
-const playerContainer = document.getElementById("player-container"); // если используется для VK
+const playerContainer = document.getElementById("player-container");
 const mediaTitle = document.getElementById("mediaTitle");
 const mediaCategory = document.getElementById("mediaCategory");
 const mediaPoster = document.getElementById("mediaPoster");
@@ -26,7 +26,7 @@ let pingHistory = [];
 
 async function fetchPlaylist() {
   try {
-    const response = await fetch("PLGD-berlandbor-1.json");
+    const response = await fetch("PLGD-berlandbor-1.json?ts=" + Date.now()); // кэш-бастер
     return await response.json();
   } catch (e) {
     console.warn('Ошибка загрузки плейлиста:', e);
@@ -48,11 +48,18 @@ async function initPlayer() {
     // Ищем в плейлисте по VK
     const playlist = await fetchPlaylist();
     let media = null;
-    if (playlist) {
+
+    if (playlist && Array.isArray(playlist)) {
+      console.log('playlist:', playlist);
+      console.log('vk_oid:', vk_oid, 'vk_id:', vk_id, 'vk_hash:', vk_hash);
       media = playlist.find(item =>
-        item.vk_oid === vk_oid && item.vk_id === vk_id && item.vk_hash === vk_hash
+        String(item.vk_oid) === String(vk_oid) &&
+        String(item.vk_id) === String(vk_id) &&
+        String(item.vk_hash) === String(vk_hash)
       );
+      console.log('media найдено:', media);
     }
+
     if (media) {
       title = media.title || "Без названия";
       cat = media.category || "Без категории";
@@ -90,8 +97,9 @@ async function initPlayer() {
     // Ищем в плейлисте по id
     const playlist = await fetchPlaylist();
     let media = null;
-    if (playlist) {
-      media = playlist.find(item => item.id === fileId);
+
+    if (playlist && Array.isArray(playlist)) {
+      media = playlist.find(item => String(item.id) === String(fileId));
     }
     if (media) {
       title = media.title || "Без названия";
@@ -178,7 +186,7 @@ async function initPlayer() {
           streamError.style.display = "block";
         }
       } catch (e) {
-        // Браузер блокирует доступ к iframe с другого домена — игнорируем
+        // Кросс-домен блокировка — игнорируем
       }
     }, 7000);
   }
