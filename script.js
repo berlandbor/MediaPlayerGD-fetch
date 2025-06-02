@@ -1,40 +1,29 @@
 const playlistContainer = document.getElementById("playlist");
 const clearDbBtn = document.getElementById("clearDbBtn");
 const categoryFilter = document.getElementById("categoryFilter");
+const reloadPlaylistBtn = document.getElementById("reloadPlaylistBtn");
 
-const STORAGE_KEY = "gdrive_playlist";
 let currentPlaylist = [];
 
-window.addEventListener("DOMContentLoaded", () => {
-  const saved = localStorage.getItem(STORAGE_KEY);
+// Загрузка и отрисовка плейлиста
+function loadAndRenderPlaylist() {
+  fetch("PLGD-berlandbor-1.json")
+    .then(res => res.json())
+    .then(data => {
+      currentPlaylist = data;
+      updateFilterOptions(data);
+      renderPlaylist(data);
+    })
+    .catch(err => {
+      console.error("Ошибка загрузки плейлиста:", err);
+      playlistContainer.innerHTML = "<p>❌ Не удалось загрузить плейлист.</p>";
+    });
+}
 
-  if (saved) {
-    try {
-      currentPlaylist = JSON.parse(saved);
-      updateFilterOptions(currentPlaylist);
-      renderPlaylist(currentPlaylist);
-    } catch (e) {
-      console.warn("Ошибка чтения localStorage:", e);
-    }
-  } else {
-    // Автозагрузка через fetch
-    fetch("PLGD-berlandbor-1.json")
-      .then(res => res.json())
-      .then(data => {
-        currentPlaylist = data;
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-        updateFilterOptions(data);
-        renderPlaylist(data);
-      })
-      .catch(err => {
-        console.error("Ошибка загрузки плейлиста:", err);
-        playlistContainer.innerHTML = "<p>❌ Не удалось загрузить плейлист.</p>";
-      });
-  }
-});
+window.addEventListener("DOMContentLoaded", loadAndRenderPlaylist);
 
 clearDbBtn.addEventListener("click", () => {
-  localStorage.removeItem(STORAGE_KEY);
+  // Просто очищаем интерфейс и фильтр (localStorage НЕ используем)
   currentPlaylist = [];
   playlistContainer.innerHTML = "<p>📭 Плейлист очищен.</p>";
   categoryFilter.innerHTML = `<option value="all">Все категории</option>`;
@@ -49,6 +38,8 @@ categoryFilter.addEventListener("change", () => {
     renderPlaylist(filtered);
   }
 });
+
+reloadPlaylistBtn.addEventListener("click", loadAndRenderPlaylist);
 
 function renderPlaylist(items) {
   playlistContainer.innerHTML = "";
@@ -70,35 +61,6 @@ function renderPlaylist(items) {
   });
 }
 
-/*function renderPlaylist(items) {
-  playlistContainer.innerHTML = "";
-  items.forEach(item => {
-    const { title, id, poster, category, url } = item;
-    const imageSrc = poster || `https://drive.google.com/thumbnail?id=${id}`;
-
-    const tile = document.createElement("div");
-    tile.className = "tile";
-    tile.innerHTML = `
-      <img src="${imageSrc}" />
-      <div class="tile-title">${title}</div>
-      <div class="tile-category">📁 ${category || "Без категории"}</div>
-    `;
-
-    tile.addEventListener("click", () => {
-      if (url) {
-        openPlayerModal(title, url, poster);
-      } else if (item.vk_oid && item.vk_id && item.vk_hash) {
-        const vkParams = `vk_oid=${encodeURIComponent(item.vk_oid)}&vk_id=${encodeURIComponent(item.vk_id)}&vk_hash=${encodeURIComponent(item.vk_hash)}`;
-        window.open(`player.html?${vkParams}`, "_blank");
-      } else if (id) {
-        window.open(`player.html?id=${id}`, "_blank");
-      }
-    });
-
-    playlistContainer.appendChild(tile);
-  });
-}*/
-
 function updateFilterOptions(items) {
   const categories = Array.from(new Set(items.map(i => i.category).filter(Boolean)));
   categoryFilter.innerHTML = `<option value="all">Все категории</option>`;
@@ -110,46 +72,25 @@ function updateFilterOptions(items) {
   });
 }
 
-const reloadPlaylistBtn = document.getElementById("reloadPlaylistBtn");
-reloadPlaylistBtn.addEventListener("click", () => {
-  fetch("PLGD-berlandbor-1.json")
-    .then(res => res.json())
-    .then(data => {
-      currentPlaylist = data;
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-      updateFilterOptions(data);
-      renderPlaylist(data);
-    })
-    .catch(err => {
-      console.error("Ошибка загрузки плейлиста:", err);
-      playlistContainer.innerHTML = "<p>❌ Не удалось загрузить плейлист.</p>";
-    });
-});
-
-// Получаем элементы
+// --- Модальные окна (about) ---
 const aboutBtn = document.getElementById("aboutBtn");
 const aboutModal = document.getElementById("aboutModal");
 const closeModal = document.getElementById("closeModal");
 
-// Открытие модального окна
 aboutBtn.addEventListener("click", () => {
   aboutModal.style.display = "block";
 });
-
-// Закрытие по крестику
 closeModal.addEventListener("click", () => {
   aboutModal.style.display = "none";
 });
-
-// Закрытие при клике вне модального окна
 window.addEventListener("click", (e) => {
   if (e.target === aboutModal) {
     aboutModal.style.display = "none";
   }
 });
 
+// --- Модальный плеер (если используется) ---
 function openPlayerModal(title, url, poster) {
-  // Создаем/показываем модальное окно
   let modal = document.getElementById('streamModal');
   if (!modal) {
     modal = document.createElement('div');
@@ -161,19 +102,18 @@ function openPlayerModal(title, url, poster) {
         <div id="modalPlayerTitle" style="color:#fff;font-size:1.2em;margin-bottom:12px;"></div>
         <div id="modalPlayerDiag" style="color:#eee;font-size:0.98em;margin-bottom:8px;"></div>
         <div id="modalPlayerContent"></div>
-        
       </div>
     `;
     document.body.appendChild(modal);
     document.getElementById('closeStreamModal').onclick = () => {
-  const player = document.getElementById('diagMedia');
-  if (player) {
-    player.pause();
-    player.src = "";
-    player.load();
-  }
-  modal.style.display = 'none';
-}
+      const player = document.getElementById('diagMedia');
+      if (player) {
+        player.pause();
+        player.src = "";
+        player.load();
+      }
+      modal.style.display = 'none';
+    }
   }
   document.getElementById('modalPlayerTitle').textContent = title;
 
@@ -193,7 +133,7 @@ function openPlayerModal(title, url, poster) {
   document.getElementById('modalPlayerContent').innerHTML = media;
   modal.style.display = 'flex';
 
-  // --- Диагностика как в player.js ---
+  // --- Диагностика ---
   setTimeout(() => {
     const player = document.getElementById('diagMedia');
     const diagDiv = document.getElementById('modalPlayerDiag');
