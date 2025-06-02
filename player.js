@@ -26,8 +26,10 @@ let pingHistory = [];
 
 async function fetchPlaylist() {
   try {
-    const response = await fetch("PLGD-berlandbor-1.json?ts=" + Date.now()); // кэш-бастер
-    return await response.json();
+    const response = await fetch("PLGD-berlandbor-1.json?ts=" + Date.now()); // cache-buster
+    const json = await response.json();
+    if (!Array.isArray(json)) throw new Error("Плейлист не массив!");
+    return json;
   } catch (e) {
     console.warn('Ошибка загрузки плейлиста:', e);
     return null;
@@ -45,19 +47,21 @@ async function initPlayer() {
       <iframe id="videoFrame" src="${vk_url}" width="720" height="420" frameborder="0" allowfullscreen allow="autoplay; encrypted-media"></iframe>
     `;
 
-    // Ищем в плейлисте по VK
+    // Получаем плейлист
     const playlist = await fetchPlaylist();
     let media = null;
 
-    if (playlist && Array.isArray(playlist)) {
-      console.log('playlist:', playlist);
-      console.log('vk_oid:', vk_oid, 'vk_id:', vk_id, 'vk_hash:', vk_hash);
+    if (playlist) {
+      // Логируем для отладки
+      console.log('--- VK поиск ---');
+      console.log('Плейлист:', playlist);
+      console.log('URL параметры:', {vk_oid, vk_id, vk_hash});
       media = playlist.find(item =>
         String(item.vk_oid) === String(vk_oid) &&
         String(item.vk_id) === String(vk_id) &&
         String(item.vk_hash) === String(vk_hash)
       );
-      console.log('media найдено:', media);
+      console.log('VK найдено:', media);
     }
 
     if (media) {
@@ -94,12 +98,16 @@ async function initPlayer() {
       videoFrame.src = url;
     }
 
-    // Ищем в плейлисте по id
+    // Получаем плейлист
     const playlist = await fetchPlaylist();
     let media = null;
-
-    if (playlist && Array.isArray(playlist)) {
+    if (playlist) {
+      // Логируем для отладки
+      console.log('--- GD поиск ---');
+      console.log('Плейлист:', playlist);
+      console.log('URL параметр id:', fileId);
       media = playlist.find(item => String(item.id) === String(fileId));
+      console.log('GD найдено:', media);
     }
     if (media) {
       title = media.title || "Без названия";
@@ -128,17 +136,18 @@ async function initPlayer() {
   }
 
   // Кнопка "Поделиться"
-  shareBtn.addEventListener("click", () => {
-    let shareText = `🎬 ${title}\n`;
-    if (cat) shareText += `Категория: ${cat}\n`;
-    if (desc) shareText += `${desc}\n`;
-    if (poster) shareText += `Постер: ${poster}\n`;
-    shareText += `Смотреть: ${shareUrl}`;
-
-    navigator.clipboard.writeText(shareText).then(() => {
-      shareLink.textContent = `Скопирована ссылка на: ${title}. - Теперь можно поделиться!`;
+  if (shareBtn) {
+    shareBtn.addEventListener("click", () => {
+      let shareText = `🎬 ${title}\n`;
+      if (cat) shareText += `Категория: ${cat}\n`;
+      if (desc) shareText += `${desc}\n`;
+      if (poster) shareText += `Постер: ${poster}\n`;
+      shareText += `Смотреть: ${shareUrl}`;
+      navigator.clipboard.writeText(shareText).then(() => {
+        shareLink.textContent = `Скопирована ссылка на: ${title}. - Теперь можно поделиться!`;
+      });
     });
-  });
+  }
 
   // Пинг до Google
   async function pingGoogle() {
@@ -148,14 +157,12 @@ async function initPlayer() {
       const latency = Math.round(performance.now() - start);
       pingResult.textContent = latency;
       netStatus.textContent = "🟢 Онлайн";
-
       pingHistory.push(latency);
       if (pingHistory.length > 50) pingHistory.shift();
       drawPingChart();
     } catch {
       netStatus.textContent = "🔴 Проблема с сетью";
       pingResult.textContent = "–";
-
       pingHistory.push(100);
       if (pingHistory.length > 50) pingHistory.shift();
       drawPingChart();
@@ -167,7 +174,7 @@ async function initPlayer() {
     ctx.beginPath();
     pingHistory.forEach((val, i) => {
       const x = (i / pingHistory.length) * pingChart.width;
-      const y = pingChart.height - Math.min(val, 200) / 2; // масштаб
+      const y = pingChart.height - Math.min(val, 200) / 2;
       if (i === 0) ctx.moveTo(x, y);
       else ctx.lineTo(x, y);
     });
@@ -186,7 +193,7 @@ async function initPlayer() {
           streamError.style.display = "block";
         }
       } catch (e) {
-        // Кросс-домен блокировка — игнорируем
+        // Игнорируем кросс-домен блокировку
       }
     }, 7000);
   }
