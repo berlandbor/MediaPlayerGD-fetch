@@ -1,15 +1,15 @@
 const params = new URLSearchParams(window.location.search);
 const fileId = params.get("id");
-
-
-//const params = new URLSearchParams(location.search);
-const title = params.get("title");
-//const id = params.get("id");
-const poster = params.get("poster");
-const category = params.get("category");
-const description = params.get("description");
+const vk_oid = params.get('vk_oid');
+const vk_id = params.get('vk_id');
+const vk_hash = params.get('vk_hash');
+const titleFromUrl = params.get("title");
+const posterFromUrl = params.get("poster");
+const categoryFromUrl = params.get("category");
+const descriptionFromUrl = params.get("description");
 
 const videoFrame = document.getElementById("videoFrame");
+const playerContainer = document.getElementById("player-container"); // если используется для VK
 const mediaTitle = document.getElementById("mediaTitle");
 const mediaCategory = document.getElementById("mediaCategory");
 const mediaPoster = document.getElementById("mediaPoster");
@@ -24,192 +24,94 @@ const ctx = pingChart.getContext("2d");
 
 let pingHistory = [];
 
-if (!fileId) {
-  document.body.innerHTML = "<p>❌ Ошибка: медиа не выбрано</p>";
-} else {
-  const url = `https://drive.google.com/file/d/${fileId}/preview`;
-  videoFrame.src = url;
-
-  // Получаем данные из localStorage
-  const playlistRaw = localStorage.getItem("gdrive_playlist");
-  if (playlistRaw) {
-    try {
-      const playlist = JSON.parse(playlistRaw);
-      const media = playlist.find(item => item.id === fileId);
-
-      if (media) {
-        mediaTitle.textContent = media.title || "Без названия";
-        mediaCategory.textContent = media.category || "Без категории";
-        mediaPoster.src = media.poster || `https://drive.google.com/thumbnail?id=${media.id}`;
-        mediaDescription.textContent = media.description || "";
-      } else {
-        mediaTitle.textContent = "Медиа не найдено в базе";
-      }
-    } catch (e) {
-      console.warn("Ошибка чтения localStorage:", e);
-    }
+async function fetchPlaylist() {
+  try {
+    const response = await fetch("PLGD-berlandbor-1.json");
+    return await response.json();
+  } catch (e) {
+    console.warn('Ошибка загрузки плейлиста:', e);
+    return null;
   }
-
-/*function getQueryParam(name) {
-  const url = new URL(window.location.href);
-  return url.searchParams.get(name);
 }
 
-const vk_oid = getQueryParam('vk_oid');
-const vk_id = getQueryParam('vk_id');
-const vk_hash = getQueryParam('vk_hash');
-const fileId = getQueryParam('id'); // Google Drive ID
+async function initPlayer() {
+  // --- VK видео ---
+  if (vk_oid && vk_id && vk_hash) {
+    const vk_url = `https://vk.com/video_ext.php?oid=${vk_oid}&id=${vk_id}&hash=${vk_hash}`;
+    playerContainer.innerHTML = `
+      <iframe src="${vk_url}" width="720" height="420" frameborder="0" allowfullscreen allow="autoplay; encrypted-media"></iframe>
+    `;
 
-// Элементы для инфоблока
-const mediaTitle = document.getElementById('mediaTitle');
-const mediaCategory = document.getElementById('mediaCategory');
-const mediaPoster = document.getElementById('mediaPoster');
-const mediaDescription = document.getElementById('mediaDescription');
-const playerContainer = document.getElementById('player-container');
-
-// --- VK видео ---
-if (vk_oid && vk_id && vk_hash) {
-  const vk_url = `https://vk.com/video_ext.php?oid=${vk_oid}&id=${vk_id}&hash=${vk_hash}`;
-  playerContainer.innerHTML = `
-    <iframe src="${vk_url}" width="720" height="420" frameborder="0" allowfullscreen allow="autoplay; encrypted-media"></iframe>
-  `;
-
-  // Попытка найти и отобразить доп. инфу из плейлиста
-  const playlistRaw = localStorage.getItem("gdrive_playlist");
-  if (playlistRaw) {
-    try {
-      const playlist = JSON.parse(playlistRaw);
-      // Найти по vk_oid/vk_id/vk_hash
-      const media = playlist.find(item => 
+    // Ищем в плейлисте по VK
+    const playlist = await fetchPlaylist();
+    let media = null;
+    if (playlist) {
+      media = playlist.find(item =>
         item.vk_oid === vk_oid && item.vk_id === vk_id && item.vk_hash === vk_hash
       );
-      if (media) {
-        mediaTitle.textContent = media.title || "Без названия";
-        mediaCategory.textContent = media.category || "Без категории";
-        mediaPoster.src = media.poster || "https://vk.com/images/video_placeholder.png";
-        mediaDescription.textContent = media.description || "";
-      } else {
-        mediaTitle.textContent = "VK-видео не найдено в базе";
-      }
-    } catch (e) {
-      console.warn("Ошибка чтения localStorage:", e);
+    }
+    if (media) {
+      mediaTitle.textContent = media.title || "Без названия";
+      mediaCategory.textContent = media.category || "Без категории";
+      mediaPoster.src = media.poster || "https://vk.com/images/video_placeholder.png";
+      mediaDescription.textContent = media.description || "";
+    } else {
+      // Если нет в плейлисте — использовать данные из URL (если они есть)
+      mediaTitle.textContent = titleFromUrl || "VK-видео";
+      mediaCategory.textContent = categoryFromUrl || "Без категории";
+      mediaPoster.src = posterFromUrl || "https://vk.com/images/video_placeholder.png";
+      mediaDescription.textContent = descriptionFromUrl || "";
     }
   }
-}
-// --- Google Drive видео ---
-else if (fileId) {
-  const url = `https://drive.google.com/file/d/${fileId}/preview`;
-  playerContainer.innerHTML = `<iframe src="${url}" width="720" height="420" frameborder="0" allowfullscreen></iframe>`;
 
-  // Получаем данные из localStorage
-  const playlistRaw = localStorage.getItem("gdrive_playlist");
-  if (playlistRaw) {
-    try {
-      const playlist = JSON.parse(playlistRaw);
-      const media = playlist.find(item => item.id === fileId);
-
-      if (media) {
-        mediaTitle.textContent = media.title || "Без названия";
-        mediaCategory.textContent = media.category || "Без категории";
-        mediaPoster.src = media.poster || `https://drive.google.com/thumbnail?id=${media.id}`;
-        mediaDescription.textContent = media.description || "";
-      } else {
-        mediaTitle.textContent = "Медиа не найдено в базе";
-      }
-    } catch (e) {
-      console.warn("Ошибка чтения localStorage:", e);
+  // --- Google Drive видео ---
+  else if (fileId) {
+    const url = `https://drive.google.com/file/d/${fileId}/preview`;
+    if (playerContainer) {
+      playerContainer.innerHTML = `<iframe id="videoFrame" src="${url}" width="720" height="420" frameborder="0" allowfullscreen></iframe>`;
+    } else if (videoFrame) {
+      videoFrame.src = url;
     }
+
+    // Ищем в плейлисте по id
+    const playlist = await fetchPlaylist();
+    let media = null;
+    if (playlist) {
+      media = playlist.find(item => item.id === fileId);
+    }
+    if (media) {
+      mediaTitle.textContent = media.title || "Без названия";
+      mediaCategory.textContent = media.category || "Без категории";
+      mediaPoster.src = media.poster || `https://drive.google.com/thumbnail?id=${media.id}`;
+      mediaDescription.textContent = media.description || "";
+    } else {
+      // Если нет в плейлисте — использовать данные из URL (если они есть)
+      mediaTitle.textContent = titleFromUrl || "Без названия";
+      mediaCategory.textContent = categoryFromUrl || "Без категории";
+      mediaPoster.src = posterFromUrl || `https://drive.google.com/thumbnail?id=${fileId}`;
+      mediaDescription.textContent = descriptionFromUrl || "";
+    }
+  } else {
+    document.body.innerHTML = "<p>❌ Ошибка: медиа не выбрано</p>";
+    return;
   }
-} else {
-  document.body.innerHTML = "<p>❌ Ошибка: медиа не выбрано</p>";
-}*/
 
-  
-/* // Кнопка "Поделиться"
-const fullLink = `${location.origin}${location.pathname}?id=${fileId}`;
-shareBtn.addEventListener("click", () => {
-  // Получаем название видео (если оно есть)
-  const title = mediaTitle.textContent || "Видео";
-  // Формируем текст для копирования
-  const shareText = `🎬 Смотри от Berlandbor: ${title}\n${fullLink}`;
-  navigator.clipboard.writeText(shareText).then(() => {
-    shareLink.textContent = `Скопирована ссылка на: ${title}, теперь можно поделится!`;
-  });
-});*/
-
-const fullLink = `${location.origin}${location.pathname}?id=${fileId}`;
-
-/*shareBtn.addEventListener("click", () => {
-  const params = new URLSearchParams({
-    title: mediaTitle.textContent || "Видео",
-    id: fileId,
-    poster: mediaPoster.src || "",
-    category: mediaCategory.textContent || "",
-    description: mediaDescription.textContent || ""
-  });
-  const fullLink = `${location.origin}${location.pathname}?${params.toString()}`;
-  const shareText = `🎬 Смотри от Berlandbor: ${mediaTitle.textContent}\n${fullLink}`;
-  navigator.clipboard.writeText(shareText).then(() => {
-    shareLink.textContent = `Скопирована ссылка на: ${mediaTitle.textContent}. - Теперь можно поделиться!`;
-  });
-});*/
-
-shareBtn.addEventListener("click", () => {
-  const params = new URLSearchParams({
-    title: mediaTitle.textContent || "Видео",
-    id: fileId,
-    poster: mediaPoster.src || "",
-    category: mediaCategory.textContent || "",
-    description: /*mediaDescription.textContent ||*/ "😀"
-  });
-  const fullLink = `${location.origin}${location.pathname}?${params.toString()}`;
-
-  // Добавляем постер в текст
-  const posterLine = mediaPoster.src ? `Постер: ${mediaPoster.src}\n` : '';
-
-  const shareText = `🎬 Смотри от Berlandbor: ${mediaTitle.textContent}\n${fullLink}\n${posterLine}`;
-  navigator.clipboard.writeText(shareText).then(() => {
-    shareLink.textContent = `Скопирована ссылка на: ${mediaTitle.textContent}. - Теперь можно поделиться!`;
-  });
-});
-
-/*shareBtn.onclick = function() {
-  // Формируем только нужные параметры в ссылке
-  const params = new URLSearchParams({
-    title: mediaTitle.textContent || "Видео",
-    poster: mediaPoster.src || "",
-    category: mediaCategory.textContent || ""
-  });
-  const fullLink = `${location.origin}${location.pathname}?${params.toString()}`;
-
-  // Формируем текст для шаринга (описание можно добавить только сюда)
-  let text = '';
-  const title = mediaTitle.textContent || '';
-  const cat = mediaCategory.textContent || '';
-  const desc = mediaDescription.textContent || '';
-  const poster = mediaPoster.src || '';
-
-  if (title) text += `🎬 ${title}\n`;
-  if (cat) text += `Категория: ${cat}\n`;
-  if (desc) text += `${desc}\n`;
-  if (poster) text += `Постер: ${poster}\n`;
-  text += `Смотреть: ${fullLink}`;
-
-  // Web Share API для смартфонов
-  if (navigator.share) {
-    navigator.share({
-      title: title,
-      text: text,
-      url: fullLink
-    }).catch(() => {});
-  } else { // Для десктопа — копируем в буфер обмена
-    navigator.clipboard.writeText(text).then(() => {
-      alert('Ссылка и данные скопированы! Можно вставить в мессенджер.');
+  // Кнопка "Поделиться"
+  shareBtn.addEventListener("click", () => {
+    const params = new URLSearchParams({
+      title: mediaTitle.textContent || "Видео",
+      id: fileId || "",
+      poster: mediaPoster.src || "",
+      category: mediaCategory.textContent || "",
+      description: mediaDescription.textContent || ""
     });
-  }
-};*/
-
-
+    const fullLink = `${location.origin}${location.pathname}?${params.toString()}`;
+    const posterLine = mediaPoster.src ? `Постер: ${mediaPoster.src}\n` : '';
+    const shareText = `🎬 Смотри от Berlandbor: ${mediaTitle.textContent}\n${fullLink}\n${posterLine}`;
+    navigator.clipboard.writeText(shareText).then(() => {
+      shareLink.textContent = `Скопирована ссылка на: ${mediaTitle.textContent}. - Теперь можно поделиться!`;
+    });
+  });
 
   // Пинг до Google
   async function pingGoogle() {
@@ -250,20 +152,23 @@ shareBtn.addEventListener("click", () => {
   function monitorIframeLoad() {
     setTimeout(() => {
       try {
-        const doc = videoFrame.contentDocument || videoFrame.contentWindow?.document;
+        const frame = document.getElementById("videoFrame");
+        const doc = frame?.contentDocument || frame?.contentWindow?.document;
         const bodyText = doc?.body?.innerText || "";
         if (bodyText.toLowerCase().includes("exceeded") || bodyText.length < 30) {
           streamError.style.display = "block";
         }
       } catch (e) {
         // Браузер блокирует доступ к iframe с другого домена — игнорируем
-        console.warn("iframe cross-origin проверка невозможна:", e);
+        //console.warn("iframe cross-origin проверка невозможна:", e);
       }
     }, 7000);
   }
 
-  // Запуск
   setInterval(pingGoogle, 1000);
   pingGoogle();
   monitorIframeLoad();
 }
+
+// Стартуем!
+initPlayer();
