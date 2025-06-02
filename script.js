@@ -23,7 +23,6 @@ function loadAndRenderPlaylist() {
 window.addEventListener("DOMContentLoaded", loadAndRenderPlaylist);
 
 clearDbBtn.addEventListener("click", () => {
-  // Просто очищаем интерфейс и фильтр (localStorage НЕ используем)
   currentPlaylist = [];
   playlistContainer.innerHTML = "<p>📭 Плейлист очищен.</p>";
   categoryFilter.innerHTML = `<option value="all">Все категории</option>`;
@@ -44,8 +43,13 @@ reloadPlaylistBtn.addEventListener("click", loadAndRenderPlaylist);
 function renderPlaylist(items) {
   playlistContainer.innerHTML = "";
   items.forEach(item => {
-    const { title, id, poster, category } = item;
-    const imageSrc = poster || `https://drive.google.com/thumbnail?id=${id}`;
+    const { title, id, poster, category, vk_oid, vk_id, vk_hash } = item;
+    let imageSrc = poster;
+    if (!imageSrc) {
+      if (id) imageSrc = `https://drive.google.com/thumbnail?id=${id}`;
+      else if (vk_oid && vk_id && vk_hash) imageSrc = 'https://vk.com/images/video_placeholder.png';
+      else imageSrc = '';
+    }
 
     const tile = document.createElement("div");
     tile.className = "tile";
@@ -53,10 +57,19 @@ function renderPlaylist(items) {
       <img src="${imageSrc}" />
       <div class="tile-title">${title}</div>
       <div class="tile-category">📁 ${category || "Без категории"}</div>
+      ${vk_oid && vk_id && vk_hash ? `<div class="tile-vk">VK</div>` : ""}
     `;
+
     tile.addEventListener("click", () => {
-      window.open(`player.html?id=${id}`, "_blank");
+      if (vk_oid && vk_id && vk_hash) {
+        // Открываем VK-видео через параметры
+        const vkParams = `vk_oid=${encodeURIComponent(vk_oid)}&vk_id=${encodeURIComponent(vk_id)}&vk_hash=${encodeURIComponent(vk_hash)}`;
+        window.open(`player.html?${vkParams}`, "_blank");
+      } else if (id) {
+        window.open(`player.html?id=${id}`, "_blank");
+      }
     });
+
     playlistContainer.appendChild(tile);
   });
 }
