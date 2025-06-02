@@ -154,7 +154,7 @@ const fullLink = `${location.origin}${location.pathname}?id=${fileId}`;
   });
 });*/
 
-shareBtn.addEventListener("click", () => {
+/*shareBtn.addEventListener("click", () => {
   const params = new URLSearchParams({
     title: mediaTitle.textContent || "Видео",
     id: fileId,
@@ -171,7 +171,43 @@ shareBtn.addEventListener("click", () => {
   navigator.clipboard.writeText(shareText).then(() => {
     shareLink.textContent = `Скопирована ссылка на: ${mediaTitle.textContent}. - Теперь можно поделиться!`;
   });
-});
+});*/
+
+shareBtn.onclick = function() {
+  // Формируем только нужные параметры в ссылке
+  const params = new URLSearchParams({
+    title: mediaTitle.textContent || "Видео",
+    poster: mediaPoster.src || "",
+    category: mediaCategory.textContent || ""
+  });
+  const fullLink = `${location.origin}${location.pathname}?${params.toString()}`;
+
+  // Формируем текст для шаринга (описание можно добавить только сюда)
+  let text = '';
+  const title = mediaTitle.textContent || '';
+  const cat = mediaCategory.textContent || '';
+  const desc = mediaDescription.textContent || '';
+  const poster = mediaPoster.src || '';
+
+  if (title) text += `🎬 ${title}\n`;
+  if (cat) text += `Категория: ${cat}\n`;
+  if (desc) text += `${desc}\n`;
+  if (poster) text += `Постер: ${poster}\n`;
+  text += `Смотреть: ${fullLink}`;
+
+  // Web Share API для смартфонов
+  if (navigator.share) {
+    navigator.share({
+      title: title,
+      text: text,
+      url: fullLink
+    }).catch(() => {});
+  } else { // Для десктопа — копируем в буфер обмена
+    navigator.clipboard.writeText(text).then(() => {
+      alert('Ссылка и данные скопированы! Можно вставить в мессенджер.');
+    });
+  }
+};
 
 
 
