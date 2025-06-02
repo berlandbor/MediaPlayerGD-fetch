@@ -97,7 +97,7 @@ async function initPlayer() {
   }
 
   // Кнопка "Поделиться"
-  shareBtn.addEventListener("click", () => {
+  /*shareBtn.addEventListener("click", () => {
     const params = new URLSearchParams({
       title: mediaTitle.textContent || "Видео",
       id: fileId || "",
@@ -111,7 +111,31 @@ async function initPlayer() {
     navigator.clipboard.writeText(shareText).then(() => {
       shareLink.textContent = `Скопирована ссылка на: ${mediaTitle.textContent}. - Теперь можно поделиться!`;
     });
+  });*/
+
+shareBtn.addEventListener("click", () => {
+  // В ссылке только id!
+  const params = new URLSearchParams({
+    id: fileId || ""
   });
+  const fullLink = `${location.origin}${location.pathname}?${params.toString()}`;
+
+  // В тексте для шаринга — всё, что нужно
+  const title = mediaTitle.textContent || "Видео";
+  const cat = mediaCategory.textContent || "";
+  const desc = mediaDescription.textContent || "";
+  const poster = mediaPoster.src || "";
+
+  let shareText = `🎬 ${title}\n`;
+  if (cat) shareText += `Категория: ${cat}\n`;
+  if (desc) shareText += `${desc}\n`;
+  if (poster) shareText += `Постер: ${poster}\n`;
+  shareText += `Смотреть: ${fullLink}`;
+
+  navigator.clipboard.writeText(shareText).then(() => {
+    shareLink.textContent = `Скопирована ссылка на: ${title}. - Теперь можно поделиться!`;
+  });
+});
 
   // Пинг до Google
   async function pingGoogle() {
